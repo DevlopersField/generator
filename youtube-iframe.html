@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Embed Code Generator</title>
+  <style>
+    /* Dark mode dev tool styles */
+    body {
+      font-family: 'Roboto Mono', monospace;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #252526;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1,
+    h2 {
+      text-align: center;
+      color: #d4d4d4;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-group label {
+      flex: 1;
+      font-weight: bold;
+      margin-right: 10px;
+      color: #d4d4d4;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"] {
+      flex: 2;
+      padding: 10px;
+      border: 1px solid #3c3c3c;
+      border-radius: 5px;
+      box-sizing: border-box;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #0066b8;
+      color: #d4d4d4;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005a9e;
+    }
+
+    .embed-code-container {
+      margin-top: 30px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #3c3c3c;
+      border-radius: 5px;
+      box-sizing: border-box;
+      resize: none;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-container {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .preview-container iframe {
+      max-width: 100%;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>YouTube Embed Code Generator</h1>
+    <div class="embed-code-container">
+      <h2>Embed Code:</h2>
+      <textarea id="embed-code" readonly></textarea>
+    </div>
+    <div class="preview-container">
+      <h2>Preview:</h2>
+      <div id="preview"></div>
+    </div>
+    <div class="form-group">
+      <label for="video-url">YouTube Video URL:</label>
+      <input type="text" id="video-url" placeholder="Enter YouTube video URL" oninput="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="start-time">Start Time (optional):</label>
+      <input type="number" id="start-time" placeholder="Enter start time in seconds" oninput="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="end-time">End Time (optional):</label>
+      <input type="number" id="end-time" placeholder="Enter end time in seconds" oninput="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="width">Width:</label>
+      <input type="number" id="width" placeholder="Enter width in pixels" value="560" oninput="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="height">Height:</label>
+      <input type="number" id="height" placeholder="Enter height in pixels" value="315" oninput="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="show-caption">Show Caption:</label>
+      <input type="checkbox" id="show-caption" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="use-enhanced-security">Use Enhanced Security:</label>
+      <input type="checkbox" id="use-enhanced-security" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="use-enhanced-privacy">Use Enhanced Privacy:</label>
+      <input type="checkbox" id="use-enhanced-privacy" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="hide-youtube-logo">Hide YouTube Logo:</label>
+      <input type="checkbox" id="hide-youtube-logo" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="show-related-video">Show Related Video:</label>
+      <input type="checkbox" id="show-related-video" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="hide-controls">Hide Controls:</label>
+      <input type="checkbox" id="hide-controls" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="show-title-and-uploader">Show Title And Uploader:</label>
+      <input type="checkbox" id="show-title-and-uploader" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="mute-video">Mute Video:</label>
+      <input type="checkbox" id="mute-video" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="allow-fullscreen">Allow Fullscreen:</label>
+      <input type="checkbox" id="allow-fullscreen" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="loop-video">Loop Video:</label>
+      <input type="checkbox" id="loop-video" onchange="generateEmbedCode()">
+    </div>
+    <div class="form-group">
+      <label for="autoplay">Autoplay:</label>
+      <input type="checkbox" id="autoplay" onchange="generateEmbedCode()">
+    </div>
+
+  </div>
+
+  <script>
+    function generateEmbedCode() {
+      const videoUrl = document.getElementById('video-url').value;
+      const startTime = document.getElementById('start-time').value;
+      const endTime = document.getElementById('end-time').value;
+      const width = document.getElementById('width').value;
+      const height = document.getElementById('height').value;
+      const showCaption = document.getElementById('show-caption').checked;
+      const useEnhancedSecurity = document.getElementById('use-enhanced-security').checked;
+      const useEnhancedPrivacy = document.getElementById('use-enhanced-privacy').checked;
+      const hideYoutubeLogo = document.getElementById('hide-youtube-logo').checked;
+      const showRelatedVideo = document.getElementById('show-related-video').checked;
+      const hideControls = document.getElementById('hide-controls').checked;
+      const showTitleAndUploader = document.getElementById('show-title-and-uploader').checked;
+      const muteVideo = document.getElementById('mute-video').checked;
+      const allowFullscreen = document.getElementById('allow-fullscreen').checked;
+      const loopVideo = document.getElementById('loop-video').checked;
+      const autoplay = document.getElementById('autoplay').checked;
+
+      let embedCode = `<iframe width="${width}" height="${height}" src="https://`;
+
+      if (useEnhancedPrivacy) {
+        embedCode += 'www.youtube-nocookie.com/embed/';
+      } else {
+        embedCode += 'www.youtube.com/embed/';
+      }
+
+      embedCode += `${getVideoId(videoUrl)}?`;
+
+      if (startTime) {
+        embedCode += `start=${startTime}&`;
+      }
+
+      if (endTime) {
+        embedCode += `end=${endTime}&`;
+      }
+
+      if (showCaption) {
+        embedCode += 'cc_load_policy=1&';
+      }
+
+      if (useEnhancedSecurity) {
+        embedCode += 'enablejsapi=1&';
+      }
+
+      if (hideYoutubeLogo) {
+        embedCode += 'modestbranding=1&';
+      }
+
+      if (showRelatedVideo) {
+        embedCode += 'rel=1&';
+      } else {
+        embedCode += 'rel=0&';
+      }
+
+      if (hideControls) {
+        embedCode += 'controls=0&';
+      }
+
+      if (showTitleAndUploader) {
+        embedCode += 'showinfo=1&';
+      } else {
+        embedCode += 'showinfo=0&';
+      }
+
+      if (muteVideo) {
+        embedCode += 'mute=1&';
+      }
+
+      if (allowFullscreen) {
+        embedCode += 'fs=1&';
+      } else {
+        embedCode += 'fs=0&';
+      }
+
+      if (loopVideo) {
+        embedCode += '&loop=1';
+      }
+
+      if (autoplay) {
+        if (loopVideo) {
+          embedCode += '&autoplay=1';
+        } else {
+          embedCode += 'autoplay=1';
+        }
+      }
+
+      embedCode += '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+
+      document.getElementById('embed-code').value = embedCode;
+      document.getElementById('preview').innerHTML = embedCode;
+    }
+
+    function getVideoId(url) {
+      const urlParams = new URL(url).searchParams;
+      return urlParams.get('v') || url.split('/').pop();
+    }
+  </script>
+</body>
+
+</html>
