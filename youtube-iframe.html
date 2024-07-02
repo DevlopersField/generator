@@ -33,19 +33,20 @@
     .form-group {
       margin-bottom: 20px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .form-group label {
-      flex: 1;
       font-weight: bold;
-      margin-right: 10px;
+      margin-bottom: 5px;
       color: #d4d4d4;
     }
 
     .form-group input[type="text"],
-    .form-group input[type="number"] {
-      flex: 2;
+    .form-group input[type="number"],
+    .form-group select {
+      width: 100%;
       padding: 10px;
       border: 1px solid #3c3c3c;
       border-radius: 5px;
@@ -55,7 +56,19 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .form-group input[type="checkbox"] {
+    .form-group .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .form-group .checkbox-group label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .form-group .checkbox-group input[type="checkbox"] {
       margin-right: 5px;
     }
 
@@ -112,6 +125,7 @@
     <div class="embed-code-container">
       <h2>Embed Code:</h2>
       <textarea id="embed-code" readonly></textarea>
+      <button id="copy-btn" style="margin-top: 40px;">Copy to Clipboard</button>
     </div>
     <div class="preview-container">
       <h2>Preview:</h2>
@@ -138,48 +152,63 @@
       <input type="number" id="height" placeholder="Enter height in pixels" value="315" oninput="generateEmbedCode()">
     </div>
     <div class="form-group">
-      <label for="show-caption">Show Caption:</label>
-      <input type="checkbox" id="show-caption" onchange="generateEmbedCode()">
+      <label for="video-quality">Video Quality:</label>
+      <select id="video-quality" onchange="generateEmbedCode()">
+        <option value="">Auto</option>
+        <option value="hd1080">1080p</option>
+        <option value="hd720">720p</option>
+        <option value="large">Large</option>
+        <option value="medium">Medium</option>
+        <option value="small">Small</option>
+      </select>
     </div>
     <div class="form-group">
-      <label for="use-enhanced-security">Use Enhanced Security:</label>
-      <input type="checkbox" id="use-enhanced-security" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="use-enhanced-privacy">Use Enhanced Privacy:</label>
-      <input type="checkbox" id="use-enhanced-privacy" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="hide-youtube-logo">Hide YouTube Logo:</label>
-      <input type="checkbox" id="hide-youtube-logo" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="show-related-video">Show Related Video:</label>
-      <input type="checkbox" id="show-related-video" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="hide-controls">Hide Controls:</label>
-      <input type="checkbox" id="hide-controls" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="show-title-and-uploader">Show Title And Uploader:</label>
-      <input type="checkbox" id="show-title-and-uploader" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="mute-video">Mute Video:</label>
-      <input type="checkbox" id="mute-video" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="allow-fullscreen">Allow Fullscreen:</label>
-      <input type="checkbox" id="allow-fullscreen" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="loop-video">Loop Video:</label>
-      <input type="checkbox" id="loop-video" onchange="generateEmbedCode()">
-    </div>
-    <div class="form-group">
-      <label for="autoplay">Autoplay:</label>
-      <input type="checkbox" id="autoplay" onchange="generateEmbedCode()">
+      <div class="checkbox-group">
+        <label>
+          <input type="checkbox" id="show-caption" onchange="generateEmbedCode()">
+          Show Caption
+        </label>
+        <label>
+          <input type="checkbox" id="use-enhanced-security" onchange="generateEmbedCode()">
+          Use Enhanced Security
+        </label>
+        <label>
+          <input type="checkbox" id="use-enhanced-privacy" onchange="generateEmbedCode()">
+          Use Enhanced Privacy
+        </label>
+        <label>
+          <input type="checkbox" id="hide-youtube-logo" onchange="generateEmbedCode()">
+          Hide YouTube Logo
+        </label>
+        <label>
+          <input type="checkbox" id="show-related-video" onchange="generateEmbedCode()">
+          Show Related Video
+        </label>
+        <label>
+          <input type="checkbox" id="hide-controls" onchange="generateEmbedCode()">
+          Hide Controls
+        </label>
+        <label>
+          <input type="checkbox" id="show-title-and-uploader" onchange="generateEmbedCode()">
+          Show Title And Uploader
+        </label>
+        <label>
+          <input type="checkbox" id="mute-video" onchange="generateEmbedCode()">
+          Mute Video
+        </label>
+        <label>
+          <input type="checkbox" id="allow-fullscreen" onchange="generateEmbedCode()">
+          Allow Fullscreen
+        </label>
+        <label>
+          <input type="checkbox" id="loop-video" onchange="generateEmbedCode()">
+          Loop Video
+        </label>
+        <label>
+          <input type="checkbox" id="autoplay" onchange="generateEmbedCode()">
+          Autoplay
+        </label>
+      </div>
     </div>
 
   </div>
@@ -191,6 +220,7 @@
       const endTime = document.getElementById('end-time').value;
       const width = document.getElementById('width').value;
       const height = document.getElementById('height').value;
+      const videoQuality = document.getElementById('video-quality').value;
       const showCaption = document.getElementById('show-caption').checked;
       const useEnhancedSecurity = document.getElementById('use-enhanced-security').checked;
       const useEnhancedPrivacy = document.getElementById('use-enhanced-privacy').checked;
@@ -206,7 +236,7 @@
       let embedCode = `<iframe width="${width}" height="${height}" src="https://`;
 
       if (useEnhancedPrivacy) {
-        embedCode += 'www.youtube-nocookie.com/embed/';
+        embedCode += 'www-nocookie.com/embed/';
       } else {
         embedCode += 'www.youtube.com/embed/';
       }
@@ -219,6 +249,10 @@
 
       if (endTime) {
         embedCode += `end=${endTime}&`;
+      }
+
+      if (videoQuality) {
+        embedCode += `&vq=${videoQuality}`;
       }
 
       if (showCaption) {
@@ -281,6 +315,14 @@
       const urlParams = new URL(url).searchParams;
       return urlParams.get('v') || url.split('/').pop();
     }
+
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      const embedCodeInput = document.getElementById('embed-code');
+      embedCodeInput.select();
+      embedCodeInput.setSelectionRange(0, 99999); // For mobile devices
+      navigator.clipboard.writeText(embedCodeInput.value);
+      alert('Embed code copied to clipboard!');
+    });
   </script>
 </body>
 
